@@ -106,7 +106,7 @@ def register(mcp: FastMCP) -> None:
                 }
             ]
         }
-        result = await client.v2_post("/batch/column", payload)
+        result = await client.v2_post("/column", payload)
         return {"columnId": column_id, "result": result}
 
     @mcp.tool(
@@ -146,7 +146,7 @@ def register(mcp: FastMCP) -> None:
         if sort_order is not None:
             update_data["sortOrder"] = sort_order
 
-        return await client.v2_post("/batch/column", {"update": [update_data]})
+        return await client.v2_post("/column", {"update": [update_data]})
 
     @mcp.tool(
         annotations={
@@ -174,7 +174,7 @@ def register(mcp: FastMCP) -> None:
         sid, _ = await _resolve_section_id(client, pid, section)
 
         await client.v2_post(
-            "/batch/column",
+            "/column",
             {"delete": [{"projectId": pid, "columnId": sid}]},
         )
         return f"Section {sid} deleted from project {pid}"
