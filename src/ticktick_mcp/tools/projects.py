@@ -135,6 +135,7 @@ def register(mcp: FastMCP) -> None:
         name: str | None = None,
         color: str | None = None,
         view_mode: str | None = None,
+        kind: str | None = None,
         folder: str | None = None,
         remove_folder: bool = False,
     ) -> dict[str, Any]:
@@ -147,6 +148,7 @@ def register(mcp: FastMCP) -> None:
             name: New project name.
             color: New hex color code.
             view_mode: New view mode: "list", "kanban", "timeline".
+            kind: Project kind: "TASK" or "NOTE". Converts between task list and note list.
             folder: Move project to this folder (name or ID).
             remove_folder: Set to true to remove the project from its folder.
         """
@@ -160,6 +162,8 @@ def register(mcp: FastMCP) -> None:
             body["color"] = color
         if view_mode is not None:
             body["viewMode"] = view_mode
+        if kind is not None:
+            body["kind"] = kind
         if remove_folder:
             body["groupId"] = "NONE"
         elif folder:
