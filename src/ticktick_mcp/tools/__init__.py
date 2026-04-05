@@ -14,6 +14,7 @@ def register_tools(mcp: FastMCP) -> None:
         folders,
         habits,
         projects,
+        sections,
         tags,
         tasks,
     )
@@ -22,6 +23,7 @@ def register_tools(mcp: FastMCP) -> None:
     projects.register(mcp)
     tags.register(mcp)
     folders.register(mcp)
+    sections.register(mcp)
     habits.register(mcp)
     filters.register(mcp)
     focus.register(mcp)

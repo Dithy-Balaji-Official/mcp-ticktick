@@ -143,6 +143,7 @@ def register(mcp: FastMCP) -> None:
         ctx: Context,
         title: str,
         project: str | None = None,
+        section: str | None = None,
         due: str | None = None,
         start: str | None = None,
         duration: str | None = None,
@@ -159,6 +160,7 @@ def register(mcp: FastMCP) -> None:
         Args:
             title: Task title (required).
             project: Project name or ID. Supports fuzzy matching. Omit for inbox.
+            section: Section (column) name or ID within the project. Supports fuzzy matching.
             due: Due date. Accepts "today", "tomorrow", "YYYY-MM-DD", "YYYY-MM-DDTHH:MM".
             start: Start date. Same format as due. If duration is set, defaults to due.
             duration: Duration like "1h", "30m", "1h30m". Requires a start or due date with a time.
@@ -175,6 +177,14 @@ def register(mcp: FastMCP) -> None:
 
         if project:
             body["projectId"] = await _resolve_project_id(client, project)
+
+        if section:
+            if not project:
+                raise ToolError("section requires a project to be specified")
+            from ticktick_mcp.tools.sections import _resolve_section_id
+
+            sid, _ = await _resolve_section_id(client, body["projectId"], section)
+            body["columnId"] = sid
 
         pri_val = PRIORITY_MAP.get(priority.lower())
         if pri_val is None:

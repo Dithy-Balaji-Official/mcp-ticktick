@@ -30,6 +30,7 @@ class Task(CamelModel):
     tags: list[str] = Field(default_factory=list)
     is_all_day: bool | None = None
     time_zone: str | None = None
+    column_id: str | None = None
     parent_id: str | None = None
     items: list[ChecklistItem] | None = None
     reminders: list[str] | None = None
@@ -118,3 +119,13 @@ class ProjectGroup(CamelModel):
     sort_order: int | None = None
     sort_type: str | None = None
     view_mode: str | None = None
+
+
+class Column(CamelModel):
+    id: str = ""
+    project_id: str | None = None
+    name: str = ""
+    sort_order: int | None = None
+    etag: str | None = None
+    created_time: str | None = None
+    modified_time: str | None = None
