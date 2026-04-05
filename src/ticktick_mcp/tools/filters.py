@@ -89,6 +89,8 @@ def register(mcp: FastMCP) -> None:
         name: str | None = None,
         rule: str | None = None,
         sort_type: str | None = None,
+        group_by: str | None = None,
+        order_by: str | None = None,
     ) -> Any:
         """Update an existing filter.
 
@@ -99,6 +101,8 @@ def register(mcp: FastMCP) -> None:
             name: New filter name.
             rule: New JSON rule definition string.
             sort_type: New sort type.
+            group_by: Group results by: "project" (list), "dueDate", "priority", "tag".
+            order_by: Order results by: "dueDate", "priority", "sortOrder", "title".
         """
         client = _get_client(ctx)
         fid, etag = await _resolve_filter(client, filter_name)
@@ -109,6 +113,13 @@ def register(mcp: FastMCP) -> None:
             update["rule"] = rule
         if sort_type is not None:
             update["sortType"] = sort_type
+        if group_by is not None or order_by is not None:
+            sort_option: dict[str, Any] = {}
+            if group_by is not None:
+                sort_option["groupBy"] = group_by
+            if order_by is not None:
+                sort_option["orderBy"] = order_by
+            update["sortOption"] = sort_option
         return await client.v2_post("/batch/filter", {"update": [update]})
 
     @mcp.tool(
